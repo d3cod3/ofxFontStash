@@ -39,7 +39,7 @@
 #include "ofMain.h"
 
 extern "C" {
-	#include "fontstash.h"
+    #include "fontstash_v1.h"
 	#include "stb_truetype.h"
 }
 

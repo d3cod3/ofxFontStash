@@ -66,7 +66,7 @@
 
 /* @rlyeh: removed STB_TRUETYPE_IMPLENTATION. We link it externally */
 #include "stb_truetype.h"
-#include "fontstash.h"
+#include "fontstash_v1.h"
 
 #define HASH_LUT_SIZE 256
 #define MAX_ROWS 128
