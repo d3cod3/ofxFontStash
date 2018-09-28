@@ -121,7 +121,7 @@ struct ofx_sth_font
 {
 	int idx;
 	int type;
-	ofx_stbtt_fontinfo font;
+    stbtt_fontinfo font;
 	unsigned char* data;
 	struct ofx_sth_glyph* glyphs;
 	int lut[HASH_LUT_SIZE];
@@ -245,11 +245,11 @@ int ofx_sth_add_font_from_memory(struct ofx_sth_stash* stash, unsigned char* buf
 
 
 	// Init stb_truetype
-	if (!ofx_stbtt_InitFont(&fnt->font, fnt->data, 0)) goto error;
+    if (!stbtt_InitFont(&fnt->font, fnt->data, 0)) goto error;
 	
 	// Store normalized line height. The real line height is got
 	// by multiplying the lineh by font size.
-	ofx_stbtt_GetFontVMetrics(&fnt->font, &ascent, &descent, &lineGap);
+    stbtt_GetFontVMetrics(&fnt->font, &ascent, &descent, &lineGap);
 	fh = ascent - descent;
 	fnt->ascender = (float)ascent / (float)fh;
 	fnt->descender = (float)descent / (float)fh;
@@ -427,11 +427,11 @@ static struct ofx_sth_glyph* get_glyph(struct ofx_sth_stash* stash, struct ofx_s
 	if (fnt->type == BMFONT) return 0;
 	
 	// For truetype fonts: create this glyph.
-	scale = stash->dpiScale * ofx_stbtt_ScaleForPixelHeight(&fnt->font, size);
-	g = ofx_stbtt_FindGlyphIndex(&fnt->font, codepoint);
+    scale = stash->dpiScale * stbtt_ScaleForPixelHeight(&fnt->font, size);
+    g = stbtt_FindGlyphIndex(&fnt->font, codepoint);
 	if(!g) return 0; /* @rlyeh: glyph not found, ie, arab chars */
-	ofx_stbtt_GetGlyphHMetrics(&fnt->font, g, &advance, &lsb);
-	ofx_stbtt_GetGlyphBitmapBox(&fnt->font, g, scale,scale, &x0,&y0,&x1,&y1);
+    stbtt_GetGlyphHMetrics(&fnt->font, g, &advance, &lsb);
+    stbtt_GetGlyphBitmapBox(&fnt->font, g, scale,scale, &x0,&y0,&x1,&y1);
 
 	gw = x1-x0 + stash->padding;
 	gh = y1-y0 + stash->padding;
@@ -534,7 +534,7 @@ static struct ofx_sth_glyph* get_glyph(struct ofx_sth_stash* stash, struct ofx_s
 	bmp = (unsigned char*)malloc(gw*gh);
 	if (bmp)
 	{
-		ofx_stbtt_MakeGlyphBitmap(&fnt->font, bmp, gw,gh,gw, scale,scale, g);
+        stbtt_MakeGlyphBitmap(&fnt->font, bmp, gw,gh,gw, scale,scale, g);
 		// Update texture
 		glBindTexture(GL_TEXTURE_2D, texture->id);
 		glPixelStorei(GL_UNPACK_ALIGNMENT,1);
@@ -709,7 +709,7 @@ void ofx_sth_draw_text(struct ofx_sth_stash* stash,
 	if (fnt->type != BMFONT && !fnt->data) return;
 
 	int len = strlen(s);
-	float scale = ofx_stbtt_ScaleForPixelHeight(&fnt->font, size);
+    float scale = stbtt_ScaleForPixelHeight(&fnt->font, size);
 	int c = 0;
 	float spacing = stash->charSpacing;
 	int doKerning = stash->doKerning;
@@ -730,7 +730,7 @@ void ofx_sth_draw_text(struct ofx_sth_stash* stash,
 
 		int diff = 0;
 		if (c < len && doKerning > 0){
-			diff = ofx_stbtt_GetCodepointKernAdvance(&fnt->font, *(s), *(s+1));
+            diff = stbtt_GetCodepointKernAdvance(&fnt->font, *(s), *(s+1));
 			//printf("diff '%c' '%c' = %d\n", *(s-1), *s, diff);
 			x += diff * scale;
 		}
@@ -759,23 +759,23 @@ void ofx_sth_dim_text(struct ofx_sth_stash* stash,
 				  float* minx, float* miny, float* maxx, float* maxy)
 {
 	unsigned int codepoint;
-	struct ofx_sth_glyph* glyph = NULL;
+    struct ofx_sth_glyph* glyph = NULL;
 	unsigned int state = 0;
 	struct ofx_sth_quad q;
 	short isize = (short)(size*10.0f);
-	struct ofx_sth_font* fnt = NULL;
+    struct ofx_sth_font* fnt = NULL;
 	float x = 0, y = 0;
 
 	*minx = *maxx = *miny = *maxy = 0;	/* @rlyeh: reset vars before failing */
 
-	if (stash == NULL) return;
+    if (stash == NULL) return;
 	fnt = stash->fonts;
-	while(fnt != NULL && fnt->idx != idx) fnt = fnt->next;
-	if (fnt == NULL) return;
+    while(fnt != NULL && fnt->idx != idx) fnt = fnt->next;
+    if (fnt == NULL) return;
 	if (fnt->type != BMFONT && !fnt->data) return;
 
 	int len = strlen(s);
-	float scale = ofx_stbtt_ScaleForPixelHeight(&fnt->font, size);
+    float scale = stbtt_ScaleForPixelHeight(&fnt->font, size);
 	int c = 0;
 	float spacing = stash->charSpacing;
 	int doKerning = stash->doKerning;
@@ -789,7 +789,7 @@ void ofx_sth_dim_text(struct ofx_sth_stash* stash,
 
 		int diff = 0;
 		if (c < len && doKerning > 0){
-			diff = ofx_stbtt_GetCodepointKernAdvance(&fnt->font, *(s), *(s+1));
+            diff = stbtt_GetCodepointKernAdvance(&fnt->font, *(s), *(s+1));
 			//printf("diff '%c' '%c' = %d\n", *(s-1), *s, diff);
 			x += diff * scale;
 		}

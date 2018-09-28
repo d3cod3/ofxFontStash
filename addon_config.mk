@@ -69,7 +69,7 @@ common:
 	
 	# TODO the "$(addon)" is hacky as I peek through the config.addons.mk to find it and might change at any time
 	# the intention here is to get the makefile to compile the .c file (seems to only handle .cpp)
-	#  ADDON_CFLAGS = -x c $(addon)/libs/fontstash/src/fontstash.c -x c $(addon)/libs/fontstash/src/stb_truetype.c
+        #  ADDON_CFLAGS = -x c $(addon)/libs/fontstash/src/fontstash_v1.c -x c $(addon)/libs/fontstash/src/stb_truetype.c
 
-	# ADDON_SOURCES = $(addon)/libs/fontstash/src/fontstash.c $(addon)/libs/fontstash/src/stb_truetype.c
+        # ADDON_SOURCES = $(addon)/libs/fontstash/src/fontstash_v1.c $(addon)/libs/fontstash/src/stb_truetype.c
 	

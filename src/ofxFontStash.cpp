@@ -670,15 +670,15 @@ ofRectangle ofxFontStash::getBBox( const string& text, float size, float xx, flo
 
 	ofRectangle totalArea;
 
-	if (stash != NULL){
+    if (stash != NULL){
 		stringstream ss(text);
 		string s;
 		int line = 0;
-		float totalH = 0;
+        //float totalH = 0;
 		vector<ofRectangle> rects;
 		while ( getline(ss, s, '\n') ) {
 			
-			float dx = 0;
+            //float dx = 0;
 			float w, h, x, y;
 			ofx_sth_dim_text( stash, fontIds[0], size / dpiScale, s.c_str(), &x, &y, &w, &h);
 			
