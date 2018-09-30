@@ -781,18 +781,19 @@ void ofx_sth_dim_text(struct ofx_sth_stash* stash,
 	int doKerning = stash->doKerning;
 	float dpiScale = stash->dpiScale;
 	
-	for (; *s; ++s){
-		if (decutf8(&state, &codepoint, *(unsigned char*)s)) continue;
+    for (; *s; ++s){
+        if (decutf8(&state, &codepoint, *(unsigned char*)s)) continue;
 		glyph = get_glyph(stash, fnt, codepoint, isize);
 		if (!glyph) continue;
 		if (!get_quad(stash, fnt, glyph, isize, &x, &y, &q)) continue;
 
 		int diff = 0;
-		if (c < len && doKerning > 0){
+        // BUG #001 - SOME macOS CRASHING ON stbtt_GetCodepointKernAdvance CALL
+        /*if (c < len && doKerning > 0){
             diff = stbtt_GetCodepointKernAdvance(&fnt->font, *(s), *(s+1));
 			//printf("diff '%c' '%c' = %d\n", *(s-1), *s, diff);
 			x += diff * scale;
-		}
+        }*/
 		x += spacing;
 
 		if (q.x0 < *minx) *minx = q.x0;
@@ -801,7 +802,7 @@ void ofx_sth_dim_text(struct ofx_sth_stash* stash,
 		if (q.y0 < *maxy) *maxy = q.y0;		//idem
 		c++;
 	}
-	if (x > *maxx) *maxx = x;
+    if (x > *maxx) *maxx = x;
 }
 
 void ofx_sth_vmetrics(struct ofx_sth_stash* stash,

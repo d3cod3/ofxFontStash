@@ -679,8 +679,8 @@ ofRectangle ofxFontStash::getBBox( const string& text, float size, float xx, flo
 		while ( getline(ss, s, '\n') ) {
 			
             //float dx = 0;
-			float w, h, x, y;
-			ofx_sth_dim_text( stash, fontIds[0], size / dpiScale, s.c_str(), &x, &y, &w, &h);
+            float w = 0, h = 0, x = 0, y = 0;
+            ofx_sth_dim_text( stash, fontIds[0], size / dpiScale, s.c_str(), &x, &y, &w, &h);
 			
 			totalArea.x = x + xx;
 			totalArea.y = yy + y ;
@@ -704,11 +704,11 @@ ofRectangle ofxFontStash::getBBox( const string& text, float size, float xx, flo
 
 		if(line > 1){ //if multiline
 			totalArea.y -= rects[0].height;
-			for(int i = 0; i < rects.size(); i++){
+            for(int i = 0; i < rects.size(); i++){
 				#if OF_VERSION_MAJOR == 0 && OF_VERSION_MINOR >= 8
 				totalArea = totalArea.getUnion(rects[i]);	//TODO
 				#endif
-			}
+            }
 		}else{
 			totalArea.y -= totalArea.height;
 		}
