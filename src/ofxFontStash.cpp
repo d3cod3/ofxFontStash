@@ -118,7 +118,7 @@ bool ofxFontStash::addFont(const std::string &fontFile)
 
 	fontIds.push_back(fontId);
 
-	ofLogNotice("ofxFontStash") << "Loaded font '" << fontFile << "' in texture ("<< texDimension << " x " << texDimension << ")";
+    //ofLogNotice("ofxFontStash") << "Loaded font '" << fontFile << "' in texture ("<< texDimension << " x " << texDimension << ")";
 	return true;
 }
 
